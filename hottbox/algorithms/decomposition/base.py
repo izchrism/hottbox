@@ -75,6 +75,7 @@ def svd(matrix, rank=None):
     if rank is None or rank >= min_dim:
         # Default on standard SVD
         U, S, V = randomized_svd(M = matrix, n_components = rank, flip_sign = True, random_state=0)
+        print("SVD Computed")
         return U, S, V
 
     else:
