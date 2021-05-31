@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.linalg
 import scipy.sparse.linalg
+from sklearn.utils.extmath import randomized_svd
 
 
 class Decomposition(object):
@@ -73,8 +74,7 @@ def svd(matrix, rank=None):
 
     if rank is None or rank >= min_dim:
         # Default on standard SVD
-        U, S, V = scipy.linalg.svd(matrix)
-        U, S, V = U[:, :rank], S[:rank], V[:rank, :]
+        U, S, V = randomized_svd(M = matrix, n_components = rank, flip_sign = True, random_state=0)
         return U, S, V
 
     else:
@@ -91,6 +91,7 @@ def svd(matrix, rank=None):
 
         # WARNING: here, V is still the transpose of what it should be
         U, S, V = U[:, ::-1], S[::-1], V[:, ::-1]
+        print("Warning! Doing Partial SVD!")
         return U, S, V.T
 
 
