@@ -76,28 +76,28 @@ def svd(matrix, rank=None):
     print(f"Rank: {rank}")
     
     
-    if rank is None or rank >= min_dim:
-        # Default on standard SVD
-        U, S, V = randomized_svd(M = matrix, n_components = rank, flip_sign = True, random_state=0)
-        print("SVD Computed")
-        return U, S, V
+#     if rank is None or rank >= min_dim:
+    # Default on standard SVD
+    U, S, V = randomized_svd(M = matrix, n_components = rank, flip_sign = True, random_state=0)
+    print("SVD Computed")
+    return U, S, V
 
-    else:
-        # We can perform a partial SVD
-        # First choose whether to use X * X.T or X.T *X
-        if dim_1 < dim_2:
-            S, U = scipy.sparse.linalg.eigsh(np.dot(matrix, matrix.T), k=rank, which='LM')
-            S = np.sqrt(S)
-            V = np.dot(matrix.T, U * 1 / S[None, :])
-        else:
-            S, V = scipy.sparse.linalg.eigsh(np.dot(matrix.T, matrix), k=rank, which='LM')
-            S = np.sqrt(S)
-            U = np.dot(matrix, V) * 1 / S[None, :]
+#     else:
+#         # We can perform a partial SVD
+#         # First choose whether to use X * X.T or X.T *X
+#         if dim_1 < dim_2:
+#             S, U = scipy.sparse.linalg.eigsh(np.dot(matrix, matrix.T), k=rank, which='LM')
+#             S = np.sqrt(S)
+#             V = np.dot(matrix.T, U * 1 / S[None, :])
+#         else:
+#             S, V = scipy.sparse.linalg.eigsh(np.dot(matrix.T, matrix), k=rank, which='LM')
+#             S = np.sqrt(S)
+#             U = np.dot(matrix, V) * 1 / S[None, :]
 
-        # WARNING: here, V is still the transpose of what it should be
-        U, S, V = U[:, ::-1], S[::-1], V[:, ::-1]
-        print("Warning! Doing Partial SVD!")
-        return U, S, V.T
+#         # WARNING: here, V is still the transpose of what it should be
+#         U, S, V = U[:, ::-1], S[::-1], V[:, ::-1]
+#         print("Warning! Doing Partial SVD!")
+#         return U, S, V.T
 
 
 def _pprint(params, offset=0, printer=repr):
